@@ -129,7 +129,7 @@ XtraChat uploads a file the user selects to a file host and returns a shareable 
 - ❌ Health, financial, authentication, personal communications *collected by us*, location, web history, user activity: **no**.
 - Certify: not sold to third parties; not used for anything unrelated to the single purpose; not used for creditworthiness/lending.
 
-**Privacy policy URL:** publish `PRIVACY.md` at a public URL (GitHub Pages is fine) and paste it here.
+**Privacy policy URL:** `https://khalilurehman-masood.github.io/xtrachat/privacy.html` — live.
 
 ---
 
@@ -173,13 +173,12 @@ before the first upload that files become public and cannot be deleted.
 
 ## Pre-submission checklist
 
-- [ ] Create the GitHub repo, then run `.\set-urls.ps1 -User <your-github-username>`
-- [ ] Push, then enable **GitHub Pages** (Settings → Pages → deploy from `main`, folder `/docs`)
-- [ ] Confirm `https://<user>.github.io/xtrachat/privacy.html` loads before submitting
+- [x] ~~Create the GitHub repo and run `set-urls.ps1`~~ — done
+- [x] ~~Enable GitHub Pages from `main` `/docs`~~ — live at https://khalilurehman-masood.github.io/xtrachat/
+- [x] ~~Add a `LICENSE`~~ — MIT
 - [ ] Register developer account, pay the one-time **$5 USD** fee, enable 2-Step Verification
-- [ ] Use a dedicated email you check often — **it cannot be changed later**, and it is shown publicly on the listing
+- [ ] Verify the contact email — remember **it cannot be changed later**, and it is shown publicly on the listing
 - [ ] Search the store for an existing "XtraChat" to avoid a name collision
-- [ ] Add a `LICENSE` file — the listing and site both say "open source", so make it true (MIT is the usual default)
 - [ ] Capture at least the first three 1280×800 screenshots (see Screenshots above)
 - [ ] Run `build.ps1`, then install the ZIP in a **fresh profile** and retest
 - [ ] Declare EU trader / non-trader status (traders must publish contact details)
