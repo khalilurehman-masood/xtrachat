@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      width: 268px; padding: 14px; margin: 0; color: #1a2333;
+    }
+    header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+    header img { width: 24px; height: 24px; }
+    h1 { font-size: 15px; margin: 0; }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+    .row .label { font-size: 13px; }
+    .row .sub { font-size: 11px; color: #7b8798; margin-top: 2px; line-height: 1.35; }
+    .hint { font-size: 11px; color: #7b8798; line-height: 1.45; border-top: 1px solid #eceff3; padding-top: 10px; }
+    .hint a { color: #0066ff; }
+    label.switch { position: relative; display: inline-block; width: 38px; height: 22px; flex: 0 0 auto; }
+    label.switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; inset: 0; background: #ccd3dd; border-radius: 22px; cursor: pointer; transition: .15s; }
+    .slider::before { content: ""; position: absolute; width: 16px; height: 16px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: .15s; }
+    input:checked + .slider { background: #0066ff; }
+    input:checked + .slider::before { transform: translateX(16px); }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="icons/icon48.png" alt="" />
+    <h1>XtraChat</h1>
+  </header>
+
+  <div class="row">
+    <div>
+      <div class="label">Show floating button</div>
+      <div class="sub">Hide it without disabling the extension.</div>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="fu-enabled" />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="row">
+    <div>
+      <div class="label">Enable on all sites</div>
+      <div class="sub">Off by default. Normally the button only appears on AI chat sites.</div>
+    </div>
+    <label class="switch">
+      <input type="checkbox" id="fu-allsites" />
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div class="hint">
+    Uploads go to <a href="https://catbox.moe" target="_blank" rel="noreferrer">catbox.moe</a>,
+    a free public host. Anyone with the link can open the file &mdash; don't upload anything private.
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "XtraChat",
+  "version": "1.0.0",
+  "homepage_url": "https://khalilurehman-masood.github.io/xtrachat/",
+  "description": "Upload a PDF or image from any page and get a shareable link to paste into your AI chat. Scanned PDFs become readable images.",
+  "minimum_chrome_version": "116",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "XtraChat",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "permissions": ["storage", "offscreen", "scripting"],
+  "host_permissions": ["https://catbox.moe/*"],
+  "optional_host_permissions": ["*://*/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*",
+        "https://www.perplexity.ai/*",
+        "https://copilot.microsoft.com/*",
+        "https://grok.com/*",
+        "https://poe.com/*",
+        "https://chat.deepseek.com/*"
+      ],
+      "js": ["styles.js", "content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

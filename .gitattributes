@@ -1,0 +1,11 @@
+# Normalize our own text files to LF in the repository.
+* text=auto eol=lf
+
+# Never touch the vendored PDF.js bytes. Their SHA-256 hashes are published in
+# vendor/README.md and quoted to Chrome Web Store reviewers, so line-ending
+# conversion here would make the files unverifiable.
+vendor/pdf.min.mjs        -text
+vendor/pdf.worker.min.mjs -text
+
+*.png binary
+*.zip binary

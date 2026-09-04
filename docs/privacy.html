@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>XtraChat — Privacy Policy</title>
+<style>
+  :root { color-scheme: light dark; --fg:#1a2333; --muted:#5f6b7d; --bg:#fff; --line:#e6eaf0; --blue:#0066ff; --warn-bg:#fff8e8; --warn-line:#ffe0a3; --warn-fg:#7a5b00; }
+  @media (prefers-color-scheme: dark) {
+    :root { --fg:#e6ebf2; --muted:#9aa7b8; --bg:#14181f; --line:#28303c; --blue:#5b9bff; --warn-bg:#2a2415; --warn-line:#4d421f; --warn-fg:#e8cd8a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+  h1 { font-size: 30px; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 38px 0 10px; }
+  .date { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+  a { color: var(--blue); }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 14px; }
+  th, td { border: 1px solid var(--line); padding: 9px 11px; text-align: left; vertical-align: top; }
+  th { background: color-mix(in srgb, var(--line) 40%, transparent); }
+  .callout { background: var(--warn-bg); border: 1px solid var(--warn-line); color: var(--warn-fg);
+    border-radius: 10px; padding: 14px 16px; margin: 22px 0; }
+  .callout b { color: inherit; }
+  ul { padding-left: 22px; }
+  li { margin: 6px 0; }
+  footer { margin-top: 48px; padding-top: 18px; border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 14px; }
+  code { background: color-mix(in srgb, var(--line) 55%, transparent); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>XtraChat — Privacy Policy</h1>
+<div class="date">Last updated: 4 September 2026</div>
+
+<p>XtraChat is a Chrome extension that uploads a PDF or image you choose to a public
+file host and gives you back a link you can paste into a chat.</p>
+
+<h2>The short version</h2>
+<p>We run no servers, collect nothing, and use no analytics. The only data that leaves
+your device is <b>the file you explicitly choose to upload</b>, and it goes straight to
+catbox.moe.</p>
+
+<h2>What leaves your device</h2>
+<p><b>Files you select.</b> When you pick a file and press Upload, that file is sent over
+HTTPS to <a href="https://catbox.moe" rel="noreferrer">catbox.moe</a>, a free third-party
+file host, which returns a public link to it.</p>
+
+<div class="callout">
+  Three things follow from this, and you should assume all of them:
+  <ul>
+    <li><b>The uploaded file is public.</b> Anyone with the link — or who guesses it — can open it. Links are not passwords.</li>
+    <li><b>Anonymous uploads cannot be deleted.</b> Neither we nor you can remove a file uploaded without a catbox account.</li>
+    <li><b>catbox.moe is not operated by us.</b> Their handling of your file is governed by their own terms at catbox.moe.</li>
+  </ul>
+  XtraChat asks you to confirm you understand this before your first upload.
+  <b>Do not upload anything confidential, personal, or sensitive.</b>
+</div>
+
+<p><b>Scanned PDFs.</b> If you upload a PDF with no text layer (a scan), XtraChat offers to
+convert its pages to images so chat tools can read them. That conversion happens
+<b>entirely on your own computer</b> using a bundled copy of PDF.js. The resulting images
+are then uploaded the same way as any other file.</p>
+
+<h2>What stays on your device</h2>
+<p>Stored locally through Chrome's <code>storage.local</code> API and never transmitted:</p>
+<ul>
+  <li>The floating button's position on screen</li>
+  <li>Whether the button is shown</li>
+  <li>Whether you have acknowledged the upload warning</li>
+</ul>
+<p>Uninstalling the extension removes all of it.</p>
+
+<h2>What we never do</h2>
+<ul>
+  <li>We do not collect, transmit, or store your browsing history, page contents, form data, credentials, or personal information.</li>
+  <li>We do not use analytics, trackers, advertising, or fingerprinting.</li>
+  <li>We do not sell or transfer your data to anyone. We never receive it.</li>
+  <li>We do not read or transmit the content of the pages the button appears on.</li>
+</ul>
+
+<h2>Permissions and why they exist</h2>
+<table>
+  <tr><th>Permission</th><th>Why</th></tr>
+  <tr><td><code>storage</code></td><td>Saves the button position and your settings locally.</td></tr>
+  <tr><td><code>offscreen</code></td><td>Renders scanned PDF pages to images on your device; Chrome's service worker has no canvas.</td></tr>
+  <tr><td><code>scripting</code></td><td>Registers the button on additional sites only after you turn on “Enable on all sites”.</td></tr>
+  <tr><td><code>https://catbox.moe/*</code></td><td>The upload endpoint.</td></tr>
+  <tr><td>Listed chat sites</td><td>Where the floating button appears by default.</td></tr>
+  <tr><td><code>*://*/*</code> (optional)</td><td>Off by default. Granted only if you explicitly enable the button on all sites, and revocable at any time from the popup.</td></tr>
+</table>
+
+<h2>Children</h2>
+<p>XtraChat is not directed at children under 13.</p>
+
+<h2>Changes</h2>
+<p>Material changes will be published on this page and the “Last updated” date will change.</p>
+
+<h2>Contact</h2>
+<p>Questions, bugs, or privacy requests:
+<a href="https://github.com/khalilurehman-masood/xtrachat/issues">open an issue on GitHub</a>.</p>
+
+<footer>
+  XtraChat is open source &middot;
+  <a href="https://github.com/khalilurehman-masood/xtrachat">github.com/khalilurehman-masood/xtrachat</a><br />
+  Not affiliated with OpenAI, Google, Anthropic, Microsoft, or catbox.moe.
+</footer>
+
+</div>
+</body>
+</html>
