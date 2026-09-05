@@ -22,7 +22,7 @@
     }
   },
   "permissions": ["storage", "offscreen", "scripting"],
-  "host_permissions": ["https://catbox.moe/*"],
+  "host_permissions": ["https://catbox.moe/*", "https://uguu.se/*"],
   "optional_host_permissions": ["*://*/*"],
   "background": { "service_worker": "background.js" },
   "content_scripts": [

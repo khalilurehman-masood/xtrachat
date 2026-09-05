@@ -95,6 +95,8 @@ button.fu-secondary:hover { background: #e3e8ef; }
   padding: 7px 9px;
 }
 #fu-copyall, #fu-cancel { margin-top: 6px; }
+.fu-link-meta { font-size: 10px; color: #8a94a3; margin: 1px 0 7px 2px; }
+.fu-link-meta.fu-temp { color: #b07d00; }
 
 /* Touch devices: Chrome for Android has no extensions yet, but Edge Canary and
    Chrome's forthcoming desktop-Android build do — and this also covers

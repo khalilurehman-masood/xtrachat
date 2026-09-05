@@ -77,20 +77,184 @@ function base64ToBlob(b64, type) {
   return new Blob([bytes], { type: type || 'application/octet-stream' });
 }
 
-async function uploadToCatbox(blob, fileName) {
+const UPLOAD_TIMEOUT_MS = 3 * 60 * 1000;
+
+// MV3 service workers are terminated after ~30s of inactivity, and an in-flight
+// fetch() does NOT reset that timer — a slow upload would be killed mid-flight
+// and the caller would just hang. Calling an extension API on a timer does reset
+// it. (The PDF path survived this only because its open port kept the worker up.)
+let keepaliveTimer = null;
+let keepaliveHolders = 0;
+
+function startKeepalive() {
+  keepaliveHolders++;
+  if (keepaliveTimer) return;
+  keepaliveTimer = setInterval(() => chrome.runtime.getPlatformInfo(() => {}), 20000);
+}
+
+function stopKeepalive() {
+  keepaliveHolders = Math.max(0, keepaliveHolders - 1);
+  if (keepaliveHolders === 0 && keepaliveTimer) {
+    clearInterval(keepaliveTimer);
+    keepaliveTimer = null;
+  }
+}
+
+// --- Hosts and speed-based routing -----------------------------------------
+// Upload speed to these hosts varies enormously by network and by day (catbox
+// measured 11 KB/s on one connection where uguu managed 198 KB/s). Rather than
+// hard-coding a winner, measure every upload and send the next one to whichever
+// host has actually been fastest for this user.
+const HOSTS = {
+  uguu: {
+    id: 'uguu',
+    label: 'uguu.se',
+    retention: 'expires in ~3 hours',
+    permanent: false,
+    maxBytes: 128 * 1024 * 1024,
+    endpoint: 'https://uguu.se/upload?output=text',
+    build(blob, name) {
+      const f = new FormData();
+      f.append('files[]', blob, name);
+      return f;
+    }
+  },
+  catbox: {
+    id: 'catbox',
+    label: 'catbox.moe',
+    retention: 'permanent',
+    permanent: true,
+    maxBytes: 200 * 1024 * 1024,
+    endpoint: 'https://catbox.moe/user/api.php',
+    build(blob, name) {
+      const f = new FormData();
+      f.append('reqtype', 'fileupload');
+      f.append('fileToUpload', blob, name);
+      return f;
+    }
+  }
+};
+
+const STATS_KEY = 'hostStats';
+const STAT_TTL_MS = 7 * 24 * 60 * 60 * 1000;  // networks change; forget stale samples
+const FAIL_COOLDOWN_MS = 10 * 60 * 1000;
+const PROBE_MAX_BYTES = 512 * 1024;           // only probe an unknown host cheaply
+
+async function getStats() {
+  const data = await chrome.storage.local.get({ [STATS_KEY]: {} });
+  return data[STATS_KEY] || {};
+}
+
+async function updateStat(id, patch) {
+  const stats = await getStats();
+  stats[id] = Object.assign({}, stats[id], patch);
+  await chrome.storage.local.set({ [STATS_KEY]: stats });
+}
+
+async function recordSpeed(id, kbps) {
+  const stats = await getStats();
+  const prev = stats[id] && stats[id].kbps;
+  // Exponential moving average, so one bad run doesn't blacklist a host.
+  const kbpsAvg = prev ? (prev * 0.5 + kbps * 0.5) : kbps;
+  await updateStat(id, { kbps: Math.round(kbpsAvg * 10) / 10, lastAt: Date.now(), failAt: 0 });
+}
+
+/**
+ * Order hosts best-first. An unmeasured host is tried first only when the file
+ * is small, so learning its speed costs the user a few seconds, not minutes.
+ */
+async function routeOrder(sizeBytes) {
+  const stats = await getStats();
+  const now = Date.now();
+
+  const candidates = Object.keys(HOSTS)
+    .filter(id => sizeBytes <= HOSTS[id].maxBytes)
+    .map(id => {
+      const s = stats[id] || {};
+      const fresh = s.lastAt && (now - s.lastAt) < STAT_TTL_MS;
+      return {
+        id,
+        kbps: fresh ? (s.kbps || 0) : 0,
+        known: !!fresh,
+        cooling: s.failAt ? (now - s.failAt) < FAIL_COOLDOWN_MS : false
+      };
+    });
+
+  candidates.sort((a, b) => {
+    // A host that just failed goes last, but is still kept as a fallback —
+    // dropping it entirely would leave nothing to fail over to.
+    if (a.cooling !== b.cooling) return a.cooling ? 1 : -1;
+    if (a.known !== b.known) {
+      // Probe an unknown host only if this upload is small enough to be cheap.
+      if (sizeBytes <= PROBE_MAX_BYTES) return a.known ? 1 : -1;
+      return a.known ? -1 : 1;
+    }
+    return b.kbps - a.kbps;
+  });
+
+  return candidates.map(c => c.id);
+}
+
+async function uploadToHost(host, blob, fileName) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), UPLOAD_TIMEOUT_MS);
+  startKeepalive();
+
+  try {
+    const res = await fetch(host.endpoint, {
+      method: 'POST',
+      body: host.build(blob, fileName),
+      signal: controller.signal
+    });
+    const text = (await res.text()).trim();
+
+    if (!res.ok || !text.startsWith('http')) {
+      throw new Error(text.slice(0, 140) || `HTTP ${res.status}`);
+    }
+    return text;
+  } catch (e) {
+    if (e.name === 'AbortError') {
+      throw new Error(`timed out after ${UPLOAD_TIMEOUT_MS / 1000}s`);
+    }
+    if (e instanceof TypeError) throw new Error('could not be reached');
+    throw e;
+  } finally {
+    clearTimeout(timer);
+    stopKeepalive();
+  }
+}
+
+/**
+ * Upload, measuring throughput and falling back to the next host on failure.
+ * Returns { url, host: {label, retention, permanent}, kbps }.
+ */
+async function upload(blob, fileName) {
   if (blob.size === 0) throw new Error('File is empty');
 
-  const form = new FormData();
-  form.append('reqtype', 'fileupload');
-  form.append('fileToUpload', blob, fileName);
+  const order = await routeOrder(blob.size);
+  if (!order.length) throw new Error('File is too large for any available host');
 
-  const res = await fetch('https://catbox.moe/user/api.php', { method: 'POST', body: form });
-  const text = (await res.text()).trim();
-
-  if (!res.ok || !text.startsWith('http')) {
-    throw new Error(text || `Upload failed (HTTP ${res.status})`);
+  const errors = [];
+  for (const id of order) {
+    const host = HOSTS[id];
+    const started = Date.now();
+    try {
+      const url = await uploadToHost(host, blob, fileName);
+      const secs = Math.max(0.001, (Date.now() - started) / 1000);
+      const kbps = (blob.size / 1024) / secs;
+      await recordSpeed(id, kbps);
+      return {
+        url,
+        host: { label: host.label, retention: host.retention, permanent: host.permanent },
+        kbps: Math.round(kbps)
+      };
+    } catch (e) {
+      errors.push(`${host.label}: ${e.message}`);
+      await updateStat(id, { failAt: Date.now() });
+    }
   }
-  return text;
+
+  throw new Error(errors.join(' | '));
 }
 
 // --- Offscreen document lifecycle -----------------------------------------
@@ -148,7 +312,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       try {
         if (!message.dataB64) throw new Error('No file data received');
         const blob = base64ToBlob(message.dataB64, message.fileType);
-        sendResponse({ success: true, url: await uploadToCatbox(blob, message.fileName) });
+        const result = await upload(blob, message.fileName);
+        sendResponse({ success: true, url: result.url, host: result.host, kbps: result.kbps });
       } catch (e) {
         sendResponse({ success: false, error: e.message });
       }
@@ -212,12 +377,12 @@ chrome.runtime.onConnect.addListener(port => {
 
           port.postMessage({ type: 'progress', phase: 'upload', page: n, total });
           try {
-            const url = await uploadToCatbox(
+            const result = await upload(
               base64ToBlob(image.dataB64, 'image/jpeg'),
               `${baseName}-p${n}.jpg`
             );
             uploaded += image.bytes;
-            port.postMessage({ type: 'link', page: n, url });
+            port.postMessage({ type: 'link', page: n, url: result.url, host: result.host });
           } catch (e) {
             failures.push(n);
           }

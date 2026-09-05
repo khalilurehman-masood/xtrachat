@@ -1,8 +1,8 @@
 # XtraChat
 
 A Chrome extension that puts a draggable floating button on AI chat pages. Pick an
-image or a PDF, and it uploads to [catbox.moe](https://catbox.moe) and hands you a
-shareable link to paste into the conversation.
+image or a PDF, and it uploads to a free public host and hands you a shareable link
+to paste into the conversation.
 
 Scanned PDFs — the ones that are just photographs of pages, with no text layer —
 are detected and converted to images on your machine first, because chat tools
@@ -70,6 +70,28 @@ This is deliberate: declaring `<all_urls>` statically would show
 "Read and change all your data on all websites" at install and, per Google's own
 review docs, substantially lengthen review.
 
+## Upload hosts and speed-based routing
+
+Upload throughput varies enormously by network and by day — on one connection
+catbox.moe measured **11 KB/s** while uguu.se managed **198 KB/s** for the same
+1 MB file. So no host is hard-coded as the winner:
+
+| Host | Retention | Max |
+|---|---|---|
+| `uguu.se` | ~3 hours | 128 MB |
+| `catbox.moe` | permanent | 200 MB |
+
+Every upload is timed and the throughput stored in `chrome.storage.local` as an
+exponential moving average. The next upload goes to whichever host has actually
+been fastest, with failover to the other on error. An unmeasured host is probed
+only when the file is ≤512 KB, so learning its speed costs seconds rather than
+minutes; samples older than 7 days are discarded because networks change; and a
+host that just failed is demoted to last place rather than dropped, so it stays
+available as a fallback.
+
+Retention differs between hosts, so the panel labels every link with the host
+that served it and how long it will live.
+
 ## Privacy
 
 Uploads are anonymous and **public** — anyone with the link can open the file, and
@@ -87,6 +109,10 @@ backend of ours. See [PRIVACY.md](PRIVACY.md).
   (~33% overhead, part of why the size cap is conservative).
 - **Uploads happen in the service worker.** catbox.moe sends no CORS headers, so a
   content-script fetch would be blocked; the worker's `host_permissions` apply.
+- **Service-worker keepalive during uploads.** MV3 kills the worker after ~30s of
+  inactivity and an in-flight `fetch()` does *not* reset that timer, so a slow
+  upload died mid-flight and the panel hung forever. An extension API is pinged
+  every 20s while an upload is running.
 - **Progress travels over a port.** `chrome.tabs.sendMessage` would need host
   permission for the page's own URL, which we deliberately don't hold.
 

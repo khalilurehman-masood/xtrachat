@@ -73,9 +73,9 @@
         </div>
         <div id="fu-consent" class="hidden">
           <div id="fu-consent-text">
-            Files are uploaded to <b>catbox.moe</b>, a free public host. Anyone with the
-            link can open the file, and anonymous uploads cannot be deleted afterwards.
-            Don't upload anything private.
+            Files go to a free public host &mdash; <b>uguu.se</b> or <b>catbox.moe</b>,
+            whichever is faster for you. Anyone with the link can open the file, and
+            uploads can't be deleted afterwards. Don't upload anything private.
           </div>
           <button id="fu-consent-ok">I understand — continue</button>
           <button id="fu-consent-no" class="fu-secondary">Cancel</button>
@@ -316,8 +316,10 @@
         .catch(() => { status.textContent = 'Copy failed'; });
     }
 
-    function addLink(url, label) {
+    function addLink(url, label, host) {
       links.push(url);
+      const wrap = document.createElement('div');
+
       const row = document.createElement('div');
       row.className = 'fu-link-row';
       const input = document.createElement('input');
@@ -331,7 +333,18 @@
       btn.addEventListener('click', () => copyText(url, 'Copied' + (label ? ' ' + label : '')));
       row.appendChild(input);
       row.appendChild(btn);
-      linksDiv.appendChild(row);
+      wrap.appendChild(row);
+
+      // Which host got used varies by measured speed, and retention differs —
+      // say so, or a 3-hour link looks like a permanent one until it 404s.
+      if (host && host.label) {
+        const meta = document.createElement('div');
+        meta.className = 'fu-link-meta' + (host.permanent ? '' : ' fu-temp');
+        meta.textContent = `${label ? label + ' · ' : ''}${host.label} · ${host.retention}`;
+        wrap.appendChild(meta);
+      }
+
+      linksDiv.appendChild(wrap);
       linksDiv.classList.remove('hidden');
       copyAllBtn.classList.toggle('hidden', links.length < 2);
     }
@@ -357,14 +370,35 @@
     }
 
     function simpleUpload(fileName, fileType, dataB64) {
-      status.textContent = 'Uploading...';
+      const bytes = Math.round(dataB64.length * 3 / 4);
+      const started = Date.now();
       setBusy(true);
+
+      // A silent "Uploading..." is indistinguishable from a hang, so tick.
+      status.textContent = `Uploading ${formatSize(bytes)}...`;
+      const tick = setInterval(() => {
+        const secs = Math.round((Date.now() - started) / 1000);
+        status.textContent = `Uploading ${formatSize(bytes)}... ${secs}s`;
+      }, 1000);
+
       chrome.runtime.sendMessage({ action: 'upload', fileName, fileType, dataB64 }, resp => {
+        clearInterval(tick);
         setBusy(false);
-        if (!resp) { status.textContent = 'No response from extension'; return; }
+
+        // Without this the error is swallowed and the panel just sits there.
+        const err = chrome.runtime.lastError;
+        if (err) {
+          status.textContent = 'Upload failed: ' + err.message + ' — try reloading the page';
+          return;
+        }
+        if (!resp) {
+          status.textContent = 'No response from the extension — try reloading the page';
+          return;
+        }
         if (resp.success) {
-          status.textContent = 'Upload complete';
-          addLink(resp.url);
+          const secs = Math.round((Date.now() - started) / 1000);
+          status.textContent = `Upload complete (${secs}s${resp.kbps ? `, ${resp.kbps} KB/s` : ''})`;
+          addLink(resp.url, '', resp.host);
           clearSelection();
         } else {
           status.textContent = 'Upload failed: ' + (resp.error || 'unknown');
@@ -415,7 +449,7 @@
           return;
         }
 
-        if (msg.type === 'link') { addLink(msg.url, `page ${msg.page}`); return; }
+        if (msg.type === 'link') { addLink(msg.url, `page ${msg.page}`, msg.host); return; }
 
         if (msg.type === 'budget') {
           status.textContent = `Stopped at page ${msg.page} — total upload size limit reached`;
