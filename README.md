@@ -57,9 +57,18 @@ All tunable at the top of `content.js`, `background.js` and `offscreen.js`.
 ## Permissions
 
 The button ships enabled only on a short list of AI chat sites (ChatGPT, Claude,
-Gemini, Perplexity, Copilot, Grok, Poe, DeepSeek). Anything wider is **opt-in**:
-the popup's "Enable on all sites" switch requests `*://*/*` at runtime and
-registers the content script dynamically. Revoking it unregisters the script.
+Gemini, Perplexity, Copilot, Grok, Poe, DeepSeek). Anything wider is **opt-in**.
+
+To make "every site" a single click rather than a scary install-time warning, a
+welcome page (`welcome.html`) opens once on install with an **Enable on all
+sites** button. It calls `chrome.permissions.request()` from a user gesture;
+`background.js` then registers the content script dynamically and injects it into
+already-open tabs, so the button appears without reloading anything. The popup's
+switch toggles the same permission later, and revoking unregisters the script.
+
+This is deliberate: declaring `<all_urls>` statically would show
+"Read and change all your data on all websites" at install and, per Google's own
+review docs, substantially lengthen review.
 
 ## Privacy
 

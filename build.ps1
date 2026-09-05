@@ -18,7 +18,9 @@ $include = @(
   'offscreen.html',
   'offscreen.js',
   'popup.html',
-  'popup.js'
+  'popup.js',
+  'welcome.html',
+  'welcome.js'
 )
 $includeDirs = @('icons', 'vendor')
 

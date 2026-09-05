@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Welcome to XtraChat</title>
+<style>
+  :root { color-scheme: light dark; --fg:#1a2333; --muted:#5f6b7d; --bg:#fff; --card:#f7f9fc; --line:#e6eaf0; --blue:#0066ff; --blue-dk:#004ac2; --ok-bg:#e9f7ee; --ok-line:#b7e3c6; --ok-fg:#1d6b38; --warn-bg:#fff8e8; --warn-line:#ffe0a3; --warn-fg:#7a5b00; }
+  @media (prefers-color-scheme: dark) {
+    :root { --fg:#e6ebf2; --muted:#9aa7b8; --bg:#14181f; --card:#1b212a; --line:#28303c; --blue:#5b9bff; --ok-bg:#16281d; --ok-line:#2c5138; --ok-fg:#8fd6a6; --warn-bg:#2a2415; --warn-line:#4d421f; --warn-fg:#e8cd8a; }
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif; }
+  .wrap { max-width: 620px; margin: 0 auto; padding: 64px 24px 80px; }
+  header { display:flex; align-items:center; gap:14px; margin-bottom: 18px; }
+  .badge { width:56px; height:56px; border-radius:14px; flex:0 0 auto;
+    background:linear-gradient(135deg,var(--blue),var(--blue-dk));
+    display:flex; align-items:center; justify-content:center; }
+  h1 { font-size: 27px; margin: 0; letter-spacing:-0.02em; }
+  h2 { font-size: 18px; margin: 32px 0 8px; }
+  p { margin: 12px 0; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .card { background: var(--card); border:1px solid var(--line); border-radius:14px; padding: 22px; margin: 26px 0; }
+  button { font: inherit; font-size: 15px; border:none; border-radius:8px; cursor:pointer; padding: 13px 18px; }
+  .primary { background: var(--blue); color:#fff; width:100%; font-weight:600; }
+  .primary:hover { background: var(--blue-dk); }
+  .primary:disabled { opacity:.6; cursor:default; }
+  .link { background:none; color:var(--muted); padding:10px 0; text-decoration:underline; width:100%; }
+  .state { border-radius:10px; padding:14px 16px; margin-top:16px; font-size:14px; display:none; }
+  .state.show { display:block; }
+  .ok { background:var(--ok-bg); border:1px solid var(--ok-line); color:var(--ok-fg); }
+  .warn { background:var(--warn-bg); border:1px solid var(--warn-line); color:var(--warn-fg); }
+  ol { padding-left:22px; } li { margin:7px 0; }
+  a { color: var(--blue); }
+  .sites { font-size:13px; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="badge">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 16V4M12 4L7 9M12 4L17 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M4 16V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V16" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h1>XtraChat is installed</h1>
+  </header>
+
+  <p>Click the floating button on a page, pick an image or PDF, and you get a shareable
+  link to paste into your chat.</p>
+
+  <div class="card">
+    <h2 style="margin-top:0">Show the button on every site?</h2>
+    <p class="muted" style="margin-top:6px">
+      Right now the button only appears on AI chat sites. Grant access to all sites and
+      it will be available everywhere you browse. You can turn this off at any time from
+      the extension's popup.
+    </p>
+
+    <button id="enable" class="primary">Enable on all sites</button>
+    <button id="skip" class="link">Keep it to chat sites only</button>
+
+    <div id="granted" class="state ok">
+      <b>Done.</b> The button now appears on every site, including tabs you already have
+      open. Turn it off any time from the extension popup.
+    </div>
+    <div id="denied" class="state warn">
+      No problem — the button still works on ChatGPT, Claude, Gemini, Perplexity, Copilot,
+      Grok, Poe and DeepSeek. You can enable all sites later from the extension popup.
+    </div>
+  </div>
+
+  <h2>How it works</h2>
+  <ol>
+    <li>Click the floating button (drag it anywhere — it remembers where).</li>
+    <li>Choose an image or PDF, or drop one onto the panel.</li>
+    <li>Copy the link and paste it into your chat.</li>
+  </ol>
+  <p class="sites">Supported files: PNG, JPG, JPEG and PDF, up to 25&nbsp;MB.
+  Scanned PDFs are converted to readable images on your own computer first.</p>
+
+  <h2>One thing to know</h2>
+  <p class="muted">Uploads go to <b>catbox.moe</b>, a free public file host.
+  Anyone with the link can open your file, and anonymous uploads can't be deleted
+  afterwards — so don't upload anything private. Details in the
+  <a id="privacy" href="https://khalilurehman-masood.github.io/xtrachat/privacy.html" target="_blank" rel="noreferrer">privacy policy</a>.</p>
+
+</div>
+<script src="welcome.js"></script>
+</body>
+</html>

@@ -34,10 +34,39 @@ async function syncDynamicScripts() {
   }
 }
 
-chrome.runtime.onInstalled.addListener(syncDynamicScripts);
+// Granting access mid-session leaves already-open tabs without the content script.
+// Inject it so the button appears immediately instead of after a reload.
+async function injectIntoOpenTabs() {
+  try {
+    const tabs = await chrome.tabs.query({ url: ['http://*/*', 'https://*/*'] });
+    for (const tab of tabs) {
+      if (!tab.id) continue;
+      try {
+        // content.js is guarded against double-injection, so the sites already
+        // covered by the manifest are harmless here.
+        await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: CONTENT_FILES });
+      } catch (e) { /* restricted page (web store, chrome://, PDF viewer) */ }
+    }
+  } catch (e) {
+    console.warn('XtraChat: could not inject into open tabs:', e.message);
+  }
+}
+
+chrome.runtime.onInstalled.addListener(async details => {
+  await syncDynamicScripts();
+  // Offer "every site" as a single click, rather than demanding broad access
+  // up front at install time.
+  if (details.reason === 'install') {
+    chrome.tabs.create({ url: chrome.runtime.getURL('welcome.html') });
+  }
+});
+
 chrome.runtime.onStartup.addListener(syncDynamicScripts);
-chrome.permissions.onAdded.addListener(syncDynamicScripts);
 chrome.permissions.onRemoved.addListener(syncDynamicScripts);
+chrome.permissions.onAdded.addListener(async perms => {
+  await syncDynamicScripts();
+  if (perms && perms.origins && perms.origins.length) await injectIntoOpenTabs();
+});
 
 // The content script sends file bytes as base64 because chrome.runtime.sendMessage
 // serializes messages as JSON (ArrayBuffers/Blobs would arrive as `{}`).
