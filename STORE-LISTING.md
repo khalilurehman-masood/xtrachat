@@ -11,7 +11,7 @@ the extension package.
 
 **Short description** (132 char max — this is `description` in manifest.json):
 ```
-Upload a PDF or image from any page and get a shareable link to paste into your AI chat. Scanned PDFs become readable images.
+Upload an image or PDF from any page and get a shareable link to paste into your AI chat. Scanned PDFs become readable images.
 ```
 
 **Category:** Productivity → Workflow & Planning
@@ -19,18 +19,18 @@ Upload a PDF or image from any page and get a shareable link to paste into your 
 
 **Detailed description:**
 ```
-XtraChat puts a small floating button on your AI chat pages. Click it, pick a PDF or an image, and you get a public link in one step — ready to paste into the conversation.
+XtraChat puts a small floating button on your AI chat pages. Click it, pick an image or a PDF, and you get a public link in one step — ready to paste into the conversation.
 
 WHY
 Chat tools each have their own upload limits, formats and quirks. A link works everywhere, in any chat, without fighting an upload dialog.
 
 HOW IT WORKS
 1. Click the floating button (drag it anywhere you like — it remembers where).
-2. Choose a PDF or image, or drop one onto the panel.
+2. Choose an image or PDF, or drop one onto the panel.
 3. Copy the link and paste it into your chat.
 
 SUPPORTED FILES
-PDF, PNG, JPG, JPEG, GIF and WEBP, up to 25 MB.
+PNG, JPG, JPEG and PDF, up to 25 MB.
 
 SCANNED PDFs
 A PDF that is just photographs of pages has no text in it, so chat tools read nothing from it. XtraChat notices this, tells you how many pages it found, and offers to convert the pages into images that a vision model can actually read. Conversion happens entirely on your own computer. Ordinary text PDFs are left alone and uploaded as-is.
@@ -94,7 +94,7 @@ affiliation, and never put those names in overlaid text.
 
 | # | Shot | What must be visible | Why it earns its place |
 |---|---|---|---|
-| 1 | **The core loop** | Floating button on a chat page with the panel open: drop zone, "PDFs and images only · max 25.0 MB", and the Upload button | Answers "what is this?" in one glance — this is the thumbnail |
+| 1 | **The core loop** | Floating button on a chat page with the panel open: drop zone, "Images (PNG, JPG, JPEG) or PDF · max 25.0 MB", and the Upload button | Answers "what is this?" in one glance — this is the thumbnail |
 | 2 | **Result** | A finished upload: the catbox link in the field, the copy icon, status "Upload complete" | Shows the payoff — the thing users came for |
 | 3 | **Scanned PDF** | The amber confirmation: "Scanned PDF — 3 pages. Convert to images?" with the Convert / Upload as-is / Cancel buttons | Your differentiator, and it demonstrates you ask before doing heavy work |
 | 4 | **Multi-page result** | Several `page 1…n` links stacked with the "Copy all links" button | Shows the feature completes, not just starts |

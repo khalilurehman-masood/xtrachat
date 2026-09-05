@@ -2,11 +2,11 @@
   if (window.__xtrachatInjected) return;
   window.__xtrachatInjected = true;
 
-  const ALLOWED_EXT = ['pdf', 'png', 'jpg', 'jpeg', 'gif', 'webp'];
+  const ALLOWED_EXT = ['png', 'jpg', 'jpeg', 'pdf'];
   const MAX_SIZE = 25 * 1024 * 1024; // 25 MB
   const MAX_CONVERT_PAGES = 10;      // mirrors background.js
   const HANDLE_MARGIN = 20;
-  const DROP_PROMPT = 'Drop a PDF or image here, or tap to browse';
+  const DROP_PROMPT = 'Drop an image or PDF here, or tap to browse';
   const TOUCH = window.matchMedia('(pointer: coarse)').matches;
 
   let host = null;   // the element in the page
@@ -64,9 +64,9 @@
       <div id="fu-handle" title="XtraChat — upload a file">${UPLOAD_ICON}</div>
       <div id="fu-panel" class="hidden">
         <div id="fu-drop"><span id="fu-drop-label">${DROP_PROMPT}</span></div>
-        <div id="fu-hint">PDFs and images only &middot; max ${formatSize(MAX_SIZE)}</div>
+        <div id="fu-hint">Images (PNG, JPG, JPEG) or PDF &middot; max ${formatSize(MAX_SIZE)}</div>
         <input id="fu-file" type="file" accept="${ALLOWED_EXT.map(e => '.' + e).join(',')}" />
-        <input id="fu-camera" type="file" accept="image/*" capture="environment" />
+        <input id="fu-camera" type="file" accept="image/png,image/jpeg" capture="environment" />
         <div id="fu-actions">
           <button id="fu-upload">Choose file</button>
           ${TOUCH ? '<button id="fu-shoot" class="fu-secondary">Camera</button>' : ''}

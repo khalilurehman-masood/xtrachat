@@ -1,7 +1,7 @@
 # XtraChat
 
-A Chrome extension that puts a draggable floating button on AI chat pages. Pick a
-PDF or image, and it uploads to [catbox.moe](https://catbox.moe) and hands you a
+A Chrome extension that puts a draggable floating button on AI chat pages. Pick an
+image or a PDF, and it uploads to [catbox.moe](https://catbox.moe) and hands you a
 shareable link to paste into the conversation.
 
 Scanned PDFs — the ones that are just photographs of pages, with no text layer —
@@ -22,7 +22,7 @@ Requires Chrome 116+ (`chrome.offscreen` and `chrome.runtime.getContexts`).
   position is remembered, and clamped back on screen if the window is resized.
 - Click the drop zone or **Choose file** to browse, or drop a file onto the panel.
   On touch devices a **Camera** button appears for photographing a document.
-- **Supported: PDF, PNG, JPG, JPEG, GIF, WEBP — up to 25 MB.**
+- **Supported: PNG, JPG, JPEG and PDF — up to 25 MB.**
 - After upload, use the copy icon next to the link. Multi-page conversions get a
   **Copy all links** button.
 - The toolbar popup has two switches: show/hide the button, and **Enable on all

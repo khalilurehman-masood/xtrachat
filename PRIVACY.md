@@ -2,8 +2,8 @@
 
 **Last updated: 4 September 2026**
 
-XtraChat is a Chrome extension that uploads a file you choose to a public file
-host and gives you back a link you can paste into a chat.
+XtraChat is a Chrome extension that uploads an image or PDF you choose to a public
+file host and gives you back a link you can paste into a chat.
 
 ## The short version
 
