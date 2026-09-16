@@ -7,7 +7,13 @@ the extension package.
 
 ## Store listing tab
 
-**Name:** `XtraChat`
+**Name:** `XtraChat — File to Link for AI Chat`
+
+The brand alone isn't searchable — nobody types "XtraChat". The suffix carries the
+words people actually search ("file to link", "upload file AI chat"), and store
+search weighs the name heavily. The toolbar tooltip stays the short "XtraChat".
+
+**Visibility:** Public (searchable + indexed by Google). Unlisted is link-only.
 
 **Short description** (132 char max — this is `description` in manifest.json):
 ```

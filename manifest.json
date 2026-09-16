@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "XtraChat",
+  "name": "XtraChat — File to Link for AI Chat",
   "version": "1.0.0",
   "homepage_url": "https://khalilurehman-masood.github.io/xtrachat/",
   "description": "Upload an image or PDF from any page and get a shareable link to paste into your AI chat. Scanned PDFs become readable images.",

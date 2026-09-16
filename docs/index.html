@@ -3,8 +3,21 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>XtraChat — Images and PDFs to a link, without leaving chat</title>
-<meta name="description" content="Chrome extension: upload an image or PDF from any page and get a shareable link for your AI chat. Scanned PDFs become readable images." />
+<title>XtraChat — Upload a File and Get a Link for ChatGPT, Claude or Gemini</title>
+<meta name="description" content="Free Chrome extension to upload an image or PDF from any page and get a shareable link to paste into ChatGPT, Claude, Gemini or any AI chat. Scanned PDFs are converted to readable images on your own computer." />
+<link rel="canonical" href="https://khalilurehman-masood.github.io/xtrachat/" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="XtraChat" />
+<meta property="og:title" content="XtraChat — Upload a File and Get a Link for Your AI Chat" />
+<meta property="og:description" content="Upload an image or PDF from any page and get a shareable link to paste into your AI chat. Scanned PDFs become readable images." />
+<meta property="og:url" content="https://khalilurehman-masood.github.io/xtrachat/" />
+<meta property="og:image" content="https://khalilurehman-masood.github.io/xtrachat/promo.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="XtraChat — Upload a File and Get a Link for Your AI Chat" />
+<meta name="twitter:description" content="Upload an image or PDF from any page and get a shareable link to paste into your AI chat." />
+<meta name="twitter:image" content="https://khalilurehman-masood.github.io/xtrachat/promo.png" />
+<link rel="icon" href="icon.png" />
 <style>
   :root { color-scheme: light dark; --fg:#1a2333; --muted:#5f6b7d; --bg:#fff; --card:#f7f9fc; --line:#e6eaf0; --blue:#0066ff; --warn-bg:#fff8e8; --warn-line:#ffe0a3; --warn-fg:#7a5b00; }
   @media (prefers-color-scheme: dark) {
@@ -31,6 +44,11 @@
   th { background: color-mix(in srgb, var(--line) 40%, transparent); }
   code { background: color-mix(in srgb, var(--line) 55%, transparent); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
   footer { margin-top: 52px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+  .cta { margin: 26px 0 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .btn { display: inline-block; background: var(--blue); color: #fff; text-decoration: none;
+    font-weight: 600; padding: 13px 22px; border-radius: 9px; }
+  .btn:hover { background: #004ac2; }
+  .cta-note { font-size: 13px; color: var(--muted); }
 </style>
 </head>
 <body>
@@ -48,7 +66,14 @@
 <p class="tag">Images and PDFs to a shareable link, without leaving your chat.</p>
 
 <p>XtraChat puts a small draggable button on AI chat pages. Click it, pick an image or a
-PDF, and you get a public link in one step — ready to paste into the conversation.</p>
+PDF, and you get a public link in one step — ready to paste into ChatGPT, Claude, Gemini,
+Perplexity or any other chat.</p>
+
+<p class="cta">
+  <a class="btn" href="https://github.com/khalilurehman-masood/xtrachat/releases/latest">Download &amp; install</a>
+  <span class="cta-note">Free and open source &middot; Chrome, Edge, Brave &middot;
+  <a href="https://github.com/khalilurehman-masood/xtrachat/blob/main/INSTALL.md">setup takes a minute</a></span>
+</p>
 
 <h2>How it works</h2>
 <ol>
