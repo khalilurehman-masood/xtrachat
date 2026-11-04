@@ -43,17 +43,20 @@ A PDF that is just photographs of pages has no text in it, so chat tools read no
 
 Sensible limits are built in: 25 MB per file, up to 10 pages converted per PDF, and you always confirm before anything is converted or uploaded.
 
+FAST, WHEREVER YOU ARE
+Upload speed to free file hosts varies wildly by network and by day. XtraChat times every upload and sends the next one to whichever host has actually been fastest for you, falling back automatically if one is down. While a file is uploading it shows the time remaining, not just a spinner.
+
 PRIVACY — PLEASE READ
-Files are uploaded to a free public file host we do not operate: uguu.se (links last about 3 hours) or catbox.moe (permanent), whichever is faster on your connection. The panel tells you which was used.
+Files are uploaded to a free public file host we do not operate — x0.at, uguu.se or catbox.moe, whichever is fastest on your connection and accepts your file type. The panel always tells you which host was used and how long that link will last.
 • Anyone with the link can open your file.
-• Uploads cannot be deleted on demand (uguu.se links do expire by themselves).
+• Uploads cannot be deleted on demand. x0.at and uguu.se links expire by themselves; catbox.moe links are permanent.
 • Do not upload anything confidential or personal.
 XtraChat itself collects nothing: no analytics, no tracking, no accounts, no servers of ours. Your settings stay on your computer.
 
 PERMISSIONS
-By default the button appears only on a short list of AI chat sites. If you want it everywhere, there is an opt-in switch in the popup — it is off unless you turn it on, and you can revoke it any time.
+The button appears on a short list of AI chat sites by default. If you want it on every page there is a single opt-in switch — off unless you turn it on, and revocable at any time from the popup.
 
-Open source. Not affiliated with OpenAI, Google, Anthropic, Microsoft, uguu.se, or catbox.moe.
+Open source. Not affiliated with OpenAI, Google, Anthropic, Microsoft, x0.at, uguu.se, or catbox.moe.
 ```
 
 **Support URL:** `https://github.com/khalilurehman-masood/xtrachat/issues`
