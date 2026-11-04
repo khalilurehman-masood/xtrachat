@@ -73,9 +73,10 @@
         </div>
         <div id="fu-consent" class="hidden">
           <div id="fu-consent-text">
-            Files go to a free public host &mdash; <b>uguu.se</b> or <b>catbox.moe</b>,
-            whichever is faster for you. Anyone with the link can open the file, and
-            uploads can't be deleted afterwards. Don't upload anything private.
+            Files go to a free public host &mdash; <b>x0.at</b>, <b>uguu.se</b> or
+            <b>catbox.moe</b>, whichever is fastest and accepts your file type. Anyone
+            with the link can open it, and uploads can't be deleted on demand.
+            Don't upload anything private.
           </div>
           <button id="fu-consent-ok">I understand — continue</button>
           <button id="fu-consent-no" class="fu-secondary">Cancel</button>

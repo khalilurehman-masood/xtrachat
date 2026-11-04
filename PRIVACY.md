@@ -17,13 +17,15 @@ upload**, and it goes straight to the file host.
 HTTPS to a free third-party file host, which returns a public link to it. Two hosts
 are used:
 
-| Host | Retention |
-|---|---|
-| [uguu.se](https://uguu.se) | Files are deleted automatically after about 3 hours |
-| [catbox.moe](https://catbox.moe) | Permanent |
+| Host | Retention | Accepts |
+|---|---|---|
+| [x0.at](https://x0.at) | Deleted automatically after up to ~100 days | Images and PDFs |
+| [uguu.se](https://uguu.se) | Deleted automatically after about 3 hours | Images only |
+| [catbox.moe](https://catbox.moe) | Permanent | Images and PDFs |
 
 XtraChat measures how fast each host actually is on your connection and sends each
-upload to whichever has been faster, falling back to the other if one fails. The
+upload to whichever has been fastest *and* accepts that file type, falling back to
+another if one fails or is unavailable. The
 extension records only the measured speed (a number, stored locally) — never the
 file, its name, or its link. The panel always shows which host was used and how
 long that link will live.
@@ -33,10 +35,11 @@ Three things follow from this, and you should assume all of them:
 - **The uploaded file is public.** Anyone who has the link — or guesses it — can
   open it. Links are not passwords.
 - **Anonymous uploads cannot be deleted on demand.** Neither XtraChat nor you can
-  remove a file once uploaded. A uguu.se upload does expire on its own after about
-  3 hours; a catbox.moe upload stays up indefinitely.
-- **Neither host is operated by us.** Their handling of your file is governed by
-  their own terms and privacy practices at https://uguu.se and https://catbox.moe.
+  remove a file once uploaded. x0.at and uguu.se uploads expire on their own; a
+  catbox.moe upload stays up indefinitely.
+- **None of these hosts are operated by us.** Their handling of your file is
+  governed by their own terms and privacy practices at https://x0.at,
+  https://uguu.se and https://catbox.moe.
 
 Because of this, XtraChat asks you to confirm you understand before your first
 upload, and repeats the warning in the extension's popup. **Do not upload
@@ -73,7 +76,7 @@ Uninstalling the extension removes all of it.
 | `storage` | Saves the button position and your settings locally. |
 | `offscreen` | Renders scanned PDF pages to images on your device; Chrome's service worker has no canvas. |
 | `scripting` | Registers the button on additional sites **only** after you turn on "Enable on all sites". |
-| `https://catbox.moe/*`, `https://uguu.se/*` | The two upload endpoints. |
+| `https://x0.at/*`, `https://catbox.moe/*`, `https://uguu.se/*` | The upload endpoints. |
 | Listed chat sites | Where the floating button appears by default. |
 | `*://*/*` (optional) | Off by default. Only granted if you explicitly enable the button on all sites, and revocable at any time from the popup. |
 

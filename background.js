@@ -105,13 +105,31 @@ function stopKeepalive() {
 // measured 11 KB/s on one connection where uguu managed 198 KB/s). Rather than
 // hard-coding a winner, measure every upload and send the next one to whichever
 // host has actually been fastest for this user.
+// `types` matters as much as speed: uguu.se rejects PDFs outright with
+// HTTP 415 "Filetype not allowed", so routing a PDF there is a guaranteed
+// failure no matter how fast it is.
 const HOSTS = {
+  x0: {
+    id: 'x0',
+    label: 'x0.at',
+    retention: 'expires in up to ~100 days',
+    permanent: false,
+    maxBytes: 1024 * 1024 * 1024,
+    types: ['png', 'jpg', 'jpeg', 'pdf'],
+    endpoint: 'https://x0.at',
+    build(blob, name) {
+      const f = new FormData();
+      f.append('file', blob, name);
+      return f;
+    }
+  },
   uguu: {
     id: 'uguu',
     label: 'uguu.se',
     retention: 'expires in ~3 hours',
     permanent: false,
     maxBytes: 128 * 1024 * 1024,
+    types: ['png', 'jpg', 'jpeg'],   // no PDFs: returns 415
     endpoint: 'https://uguu.se/upload?output=text',
     build(blob, name) {
       const f = new FormData();
@@ -125,6 +143,7 @@ const HOSTS = {
     retention: 'permanent',
     permanent: true,
     maxBytes: 200 * 1024 * 1024,
+    types: ['png', 'jpg', 'jpeg', 'pdf'],
     endpoint: 'https://catbox.moe/user/api.php',
     build(blob, name) {
       const f = new FormData();
@@ -134,6 +153,11 @@ const HOSTS = {
     }
   }
 };
+
+function extOf(name) {
+  const parts = String(name || '').split('.');
+  return parts.length > 1 ? parts.pop().toLowerCase() : '';
+}
 
 const STATS_KEY = 'hostStats';
 const STAT_TTL_MS = 7 * 24 * 60 * 60 * 1000;  // networks change; forget stale samples
@@ -163,12 +187,13 @@ async function recordSpeed(id, kbps) {
  * Order hosts best-first. An unmeasured host is tried first only when the file
  * is small, so learning its speed costs the user a few seconds, not minutes.
  */
-async function routeOrder(sizeBytes) {
+async function routeOrder(sizeBytes, ext) {
   const stats = await getStats();
   const now = Date.now();
 
   const candidates = Object.keys(HOSTS)
     .filter(id => sizeBytes <= HOSTS[id].maxBytes)
+    .filter(id => !ext || HOSTS[id].types.includes(ext))
     .map(id => {
       const s = stats[id] || {};
       const fresh = s.lastAt && (now - s.lastAt) < STAT_TTL_MS;
@@ -231,8 +256,11 @@ async function uploadToHost(host, blob, fileName) {
 async function upload(blob, fileName) {
   if (blob.size === 0) throw new Error('File is empty');
 
-  const order = await routeOrder(blob.size);
-  if (!order.length) throw new Error('File is too large for any available host');
+  const ext = extOf(fileName);
+  const order = await routeOrder(blob.size, ext);
+  if (!order.length) {
+    throw new Error(`No available host accepts .${ext || '?'} files at this size`);
+  }
 
   const errors = [];
   for (const id of order) {

@@ -1,3 +1,9 @@
 # Build output
 dist/
 *.zip
+
+# Raw listing screenshots — they contain a personal chat session, so they are
+# kept local rather than published to the repo.
+screenshots/
+Xtrachat*.PNG
+image.png

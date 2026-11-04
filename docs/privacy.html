@@ -50,22 +50,23 @@ HTTPS to a free third-party file host, which returns a public link to it. Two ho
 used:</p>
 
 <table>
-  <tr><th>Host</th><th>Retention</th></tr>
-  <tr><td><a href="https://uguu.se" rel="noreferrer">uguu.se</a></td><td>Deleted automatically after about 3 hours</td></tr>
-  <tr><td><a href="https://catbox.moe" rel="noreferrer">catbox.moe</a></td><td>Permanent</td></tr>
+  <tr><th>Host</th><th>Retention</th><th>Accepts</th></tr>
+  <tr><td><a href="https://x0.at" rel="noreferrer">x0.at</a></td><td>Deleted automatically after up to ~100 days</td><td>Images and PDFs</td></tr>
+  <tr><td><a href="https://uguu.se" rel="noreferrer">uguu.se</a></td><td>Deleted automatically after about 3 hours</td><td>Images only</td></tr>
+  <tr><td><a href="https://catbox.moe" rel="noreferrer">catbox.moe</a></td><td>Permanent</td><td>Images and PDFs</td></tr>
 </table>
 
 <p>XtraChat measures how fast each host actually is on your connection and sends each
-upload to whichever has been faster, falling back to the other if one fails. Only the
-measured speed — a number — is stored, locally. The panel always shows which host was
-used and how long that link will live.</p>
+upload to whichever has been fastest <em>and</em> accepts that file type, falling back to
+another if one fails or is unavailable. Only the measured speed — a number — is stored,
+locally. The panel always shows which host was used and how long that link will live.</p>
 
 <div class="callout">
   Three things follow from this, and you should assume all of them:
   <ul>
     <li><b>The uploaded file is public.</b> Anyone with the link — or who guesses it — can open it. Links are not passwords.</li>
-    <li><b>Uploads cannot be deleted on demand.</b> Neither we nor you can remove a file once uploaded. A uguu.se upload does expire by itself after about 3 hours; a catbox.moe upload stays up indefinitely.</li>
-    <li><b>Neither host is operated by us.</b> Their handling of your file is governed by their own terms at uguu.se and catbox.moe.</li>
+    <li><b>Uploads cannot be deleted on demand.</b> Neither we nor you can remove a file once uploaded. x0.at and uguu.se uploads expire by themselves; a catbox.moe upload stays up indefinitely.</li>
+    <li><b>None of these hosts are operated by us.</b> Their handling of your file is governed by their own terms at x0.at, uguu.se and catbox.moe.</li>
   </ul>
   XtraChat asks you to confirm you understand this before your first upload.
   <b>Do not upload anything confidential, personal, or sensitive.</b>
@@ -100,7 +101,7 @@ are then uploaded the same way as any other file.</p>
   <tr><td><code>storage</code></td><td>Saves the button position and your settings locally.</td></tr>
   <tr><td><code>offscreen</code></td><td>Renders scanned PDF pages to images on your device; Chrome's service worker has no canvas.</td></tr>
   <tr><td><code>scripting</code></td><td>Registers the button on additional sites only after you turn on “Enable on all sites”.</td></tr>
-  <tr><td><code>https://catbox.moe/*</code>, <code>https://uguu.se/*</code></td><td>The two upload endpoints.</td></tr>
+  <tr><td><code>https://x0.at/*</code>, <code>https://catbox.moe/*</code>, <code>https://uguu.se/*</code></td><td>The upload endpoints.</td></tr>
   <tr><td>Listed chat sites</td><td>Where the floating button appears by default.</td></tr>
   <tr><td><code>*://*/*</code> (optional)</td><td>Off by default. Granted only if you explicitly enable the button on all sites, and revocable at any time from the popup.</td></tr>
 </table>

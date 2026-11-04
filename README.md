@@ -76,14 +76,19 @@ Upload throughput varies enormously by network and by day — on one connection
 catbox.moe measured **11 KB/s** while uguu.se managed **198 KB/s** for the same
 1 MB file. So no host is hard-coded as the winner:
 
-| Host | Retention | Max |
-|---|---|---|
-| `uguu.se` | ~3 hours | 128 MB |
-| `catbox.moe` | permanent | 200 MB |
+| Host | Retention | Max | Accepts |
+|---|---|---|---|
+| `x0.at` | up to ~100 days | 1024 MB | images + PDF |
+| `uguu.se` | ~3 hours | 128 MB | images only — **rejects PDFs with HTTP 415** |
+| `catbox.moe` | permanent | 200 MB | images + PDF |
+
+Capability is checked before speed: routing a PDF to uguu.se is a guaranteed
+failure however fast it is, so hosts that don't accept the file's extension are
+filtered out entirely rather than ranked.
 
 Every upload is timed and the throughput stored in `chrome.storage.local` as an
-exponential moving average. The next upload goes to whichever host has actually
-been fastest, with failover to the other on error. An unmeasured host is probed
+exponential moving average. The next upload goes to whichever eligible host has
+actually been fastest, with failover to the others on error. An unmeasured host is probed
 only when the file is ≤512 KB, so learning its speed costs seconds rather than
 minutes; samples older than 7 days are discarded because networks change; and a
 host that just failed is demoted to last place rather than dropped, so it stays
