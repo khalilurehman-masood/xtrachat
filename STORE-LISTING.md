@@ -20,7 +20,14 @@ search weighs the name heavily. The toolbar tooltip stays the short "XtraChat".
 Upload an image or PDF from any page and get a shareable link to paste into your AI chat. Scanned PDFs become readable images.
 ```
 
-**Category:** Productivity → Workflow & Planning
+**Category:** Workflow & Planning
+("Productivity" no longer exists — it was split into Education, Functionality & UI,
+Household, Privacy & Security, Tools, and Workflow & Planning. Workflow & Planning is
+"extensions to help users perform their tasks more efficiently", which is exactly this.
+Avoid "Tools", which Google defines as the leftover bucket for things that fit nowhere
+else, and "Functionality & UI", which is for tab/shortcut managers that modify Chrome
+itself rather than for file workflows.)
+
 **Language:** English
 
 **Detailed description:**
