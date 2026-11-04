@@ -63,8 +63,15 @@ XtraChat itself collects nothing: no analytics, no tracking, no accounts, no ser
 PERMISSIONS
 The button appears on a short list of AI chat sites by default. If you want it on every page there is a single opt-in switch — off unless you turn it on, and revocable at any time from the popup.
 
-Open source. Not affiliated with OpenAI, Google, Anthropic, Microsoft, x0.at, uguu.se, or catbox.moe.
+Open source.
 ```
+
+> **Do not reinstate an "not affiliated with ..." disclaimer here.** Submission 1 was
+> rejected for keyword spam (ref: Yellow Argon) over the line
+> `Not affiliated with OpenAI, Google, Anthropic, Microsoft, x0.at, uguu.se, or catbox.moe.`
+> A run of brand names reads as keyword stuffing regardless of the intent behind it.
+> The description now names no company at all; the three file hosts appear only in the
+> PRIVACY section, where naming them is required disclosure of where the user's file goes.
 
 **Support URL:** `https://github.com/khalilurehman-masood/xtrachat/issues`
 **Website / homepage:** `https://khalilurehman-masood.github.io/xtrachat/`
