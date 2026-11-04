@@ -142,7 +142,7 @@ XtraChat uploads a file the user selects to a file host and returns a shareable 
 | `tabs` API (no permission declared) | chrome.tabs.create opens the one-time welcome page after install. chrome.tabs.query/scripting.executeScript are used only after the user grants all-sites access, to inject the button into already-open tabs so they don't have to reload. No tab URLs are read, stored, or transmitted. |
 
 **Data usage — declare:**
-- ✅ Personally identifiable / user content: **yes** — the file the user chooses is transmitted to uguu.se or catbox.moe at their explicit action.
+- ✅ Personally identifiable / user content: **yes** — the file the user chooses is transmitted to x0.at, uguu.se or catbox.moe at their explicit action.
 - ❌ Health, financial, authentication, personal communications *collected by us*, location, web history, user activity: **no**.
 - Certify: not sold to third parties; not used for anything unrelated to the single purpose; not used for creditworthiness/lending.
 
