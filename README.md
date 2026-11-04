@@ -97,6 +97,15 @@ available as a fallback.
 Retention differs between hosts, so the panel labels every link with the host
 that served it and how long it will live.
 
+Those stored measurements also drive the **time-remaining countdown** during an
+upload. `fetch()` in a service worker exposes no upload progress events (XHR's
+`upload.onprogress` doesn't exist there), so the remaining time is derived from
+the throughput previously measured for the host the file is being routed to. If
+that host has never been measured — which is deliberate for small files, since
+they're used to probe unknown hosts — the panel counts elapsed seconds instead
+of inventing a number. If the estimate runs out before the upload finishes, it
+says "finishing up" rather than showing a negative countdown.
+
 ## Privacy
 
 Uploads are anonymous and **public** — anyone with the link can open the file, and

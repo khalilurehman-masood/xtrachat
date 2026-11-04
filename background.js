@@ -333,8 +333,41 @@ function askOffscreen(payload) {
   });
 }
 
+/**
+ * How long this upload should take, based on the throughput actually measured
+ * for the host it will be routed to. fetch() in a service worker exposes no
+ * upload progress events (XHR's upload.onprogress doesn't exist here), so a
+ * measured-rate estimate is the only basis for a countdown.
+ * Returns seconds: null when that host has never been measured.
+ */
+async function estimateUpload(sizeBytes, fileName) {
+  const order = await routeOrder(sizeBytes, extOf(fileName));
+  if (!order.length) return { seconds: null, host: null };
+
+  const id = order[0];
+  const stats = await getStats();
+  const s = stats[id] || {};
+  const fresh = s.lastAt && (Date.now() - s.lastAt) < STAT_TTL_MS && s.kbps > 0;
+
+  return {
+    host: HOSTS[id].label,
+    seconds: fresh ? Math.max(1, Math.round((sizeBytes / 1024) / s.kbps)) : null
+  };
+}
+
 // --- Simple single-file upload (non-PDF, or PDF kept as-is) ---------------
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message && message.action === 'estimate') {
+    (async () => {
+      try {
+        sendResponse(await estimateUpload(message.size || 0, message.fileName));
+      } catch (e) {
+        sendResponse({ seconds: null, host: null });
+      }
+    })();
+    return true;
+  }
+
   if (message && message.action === 'upload') {
     (async () => {
       try {

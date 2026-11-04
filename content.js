@@ -20,6 +20,13 @@
     return parts.length > 1 ? parts.pop().toLowerCase() : '';
   }
 
+  function formatDuration(secs) {
+    if (secs < 60) return secs + 's';
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return s ? `${m}m ${s}s` : `${m}m`;
+  }
+
   function formatSize(bytes) {
     if (bytes < 1024 * 1024) return Math.ceil(bytes / 1024) + ' KB';
     return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
@@ -375,11 +382,34 @@
       const started = Date.now();
       setBusy(true);
 
-      // A silent "Uploading..." is indistinguishable from a hang, so tick.
-      status.textContent = `Uploading ${formatSize(bytes)}...`;
+      // Counts down from an estimate based on the speed actually measured for
+      // the host this will be routed to. Until that estimate arrives — or for a
+      // host never measured before — fall back to counting elapsed time, which
+      // is at least honest rather than a made-up number.
+      let remaining = null;
+      const elapsed = () => Math.round((Date.now() - started) / 1000);
+
+      function render() {
+        const size = formatSize(bytes);
+        if (remaining === null) {
+          status.textContent = `Uploading ${size}... ${elapsed()}s`;
+        } else if (remaining > 0) {
+          status.textContent = `Uploading ${size} — about ${formatDuration(remaining)} left`;
+        } else {
+          status.textContent = `Uploading ${size} — finishing up...`;
+        }
+      }
+      render();
+
+      chrome.runtime.sendMessage({ action: 'estimate', size: bytes, fileName }, est => {
+        if (chrome.runtime.lastError || !est || !est.seconds) return;
+        remaining = est.seconds;
+        render();
+      });
+
       const tick = setInterval(() => {
-        const secs = Math.round((Date.now() - started) / 1000);
-        status.textContent = `Uploading ${formatSize(bytes)}... ${secs}s`;
+        if (remaining !== null && remaining > 0) remaining--;
+        render();
       }, 1000);
 
       chrome.runtime.sendMessage({ action: 'upload', fileName, fileType, dataB64 }, resp => {
