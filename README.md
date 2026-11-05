@@ -1,5 +1,7 @@
 # XtraChat
 
+**[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/hpkgjgoigicdkobifmjmmaomcmmochhk)** &middot; [Website](https://khalilurehman-masood.github.io/xtrachat/) &middot; [Privacy policy](https://khalilurehman-masood.github.io/xtrachat/privacy.html)
+
 A Chrome extension that puts a draggable floating button on AI chat pages. Pick an
 image or a PDF, and it uploads to a free public host and hands you a shareable link
 to paste into the conversation.

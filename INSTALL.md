@@ -1,14 +1,24 @@
 # Installing XtraChat
 
-XtraChat isn't in the Chrome Web Store yet, so it installs manually. Takes about a
-minute.
+## The easy way — Chrome Web Store
+
+**[Add to Chrome](https://chromewebstore.google.com/detail/hpkgjgoigicdkobifmjmmaomcmmochhk)**
+
+One click, and it updates itself automatically. This is what you want unless you
+have a reason to run the source directly.
+
+---
+
+## Manual install (from the zip)
+
+Use this if you want to run a modified copy, or a version that isn't published yet.
 
 > **Heads up:** Chrome deliberately blocks installing extensions from a downloaded
 > `.crx` file (on Windows since Chrome 33, macOS since Chrome 44). There is no
 > double-click installer for off-store extensions — the folder method below is the
 > only supported way.
 
-## Install (Chrome, Edge, Brave, Opera — any Chromium browser)
+### Steps (Chrome, Edge, Brave, Opera — any Chromium browser)
 
 1. **Download** `xtrachat.zip` from the
    [latest release](https://github.com/khalilurehman-masood/xtrachat/releases/latest).
